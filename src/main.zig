@@ -50,13 +50,11 @@ pub fn main() !void {
     c.Cronet_Engine_Destroy(cronetEngine);
 }
 
-//export _on_stream_ready
 fn on_stream_ready(stream: [*c]c.bidirectional_stream) callconv(.C) void {
     _ = stream;
     log.info("on_stream_ready_callback", .{});
 }
 
-//export _on_response_headers_received
 fn on_response_headers_received(
     stream: [*c]c.bidirectional_stream,
     headers: [*c]const c.bidirectional_stream_header_array,
@@ -82,7 +80,6 @@ fn on_response_headers_received(
     _ = c.bidirectional_stream_read(stream, read_cstr, read_buf.len);
 }
 
-//export _on_read_completed
 fn on_read_completed(
     stream: [*c]c.bidirectional_stream,
     data: [*c]u8,
@@ -96,7 +93,6 @@ fn on_read_completed(
     _ = c.bidirectional_stream_read(stream, read_cstr, read_buf.len);
 }
 
-//export _on_write_completed
 fn on_write_completed(
     stream: [*]c.bidirectional_stream,
     data: [*:0]const u8,
@@ -106,7 +102,6 @@ fn on_write_completed(
     log.info("on_write_completed", .{});
 }
 
-//export _on_response_trailers_received
 fn on_response_trailers_received(
     stream: [*c]c.bidirectional_stream,
     trailers: [*c]const c.bidirectional_stream_header_array,
@@ -116,14 +111,12 @@ fn on_response_trailers_received(
     log.info("on_response_trailers_received", .{});
 }
 
-//export _on_succeded
 fn on_succeded(stream: [*c]c.bidirectional_stream) callconv(.C) void {
     _ = stream;
     log.info("on_succeded", .{});
     wg.finish();
 }
 
-//export _on_failed
 fn on_failed(
     stream: [*c]c.bidirectional_stream,
     net_error: c_int,
@@ -134,7 +127,6 @@ fn on_failed(
     wg.finish();
 }
 
-//export _on_canceled
 fn on_canceled(stream: [*c]c.bidirectional_stream) callconv(.C) void {
     _ = stream;
     log.info("on_canceled", .{});
