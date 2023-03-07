@@ -9,7 +9,6 @@ const c = @cImport({
 });
 
 var read_buf: [32768:0]u8 = undefined;
-var read_cstr: [*c]u8 = &read_buf;
 var wg: WaitGroup = undefined;
 
 pub fn main() !void {
@@ -77,7 +76,8 @@ fn on_response_headers_received(
         log.info("{s}: {s}", .{ key, value });
     }
 
-    _ = c.bidirectional_stream_read(stream, read_cstr, read_buf.len);
+    var buf = @ptrCast([*c]u8, &read_buf);
+    _ = c.bidirectional_stream_read(stream, buf, read_buf.len);
 }
 
 fn on_read_completed(
@@ -90,7 +90,8 @@ fn on_read_completed(
 
     log.info("{s}", .{data});
 
-    _ = c.bidirectional_stream_read(stream, read_cstr, read_buf.len);
+    var buf = @ptrCast([*c]u8, &read_buf);
+    _ = c.bidirectional_stream_read(stream, buf, read_buf.len);
 }
 
 fn on_write_completed(
